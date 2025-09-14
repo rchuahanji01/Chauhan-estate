@@ -1,134 +1,129 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import SwiperCore from 'swiper';
-import 'swiper/css/bundle';
-import ListingItem from '../components/ListingItem';
+  // import React, { useState, useEffect } from "react";
+  // import { motion, AnimatePresence } from "framer-motion";
+  // import Lotion from '../../assets/home/lotion.png'
+  // import Cover2 from '../../assets/home/cover2.png'
+  // import Cover3 from '../../assets/home/image.png'
+  // const slides = [
+  //   { id: 1, img:Lotion },
+  //   { id: 2, img:Cover2 },
+  //   { id: 3, img:Cover3 },
+  //   { id: 4, title: "Serums & Boosters", img: "/images/serum.jpg" },
+  //   { id: 5, title: "Hair Care Products", img: "/images/haircare.jpg" },
+  //   { id: 6, title: "Sun Protection", img: "/images/sunscreen.jpg" },
+  //   { id: 7, title: "Moisturizers", img: "/images/moisturizers.jpg" },
+  // ];
 
-export default function Home() {
-  const [offerListings, setOfferListings] = useState([]);
-  const [saleListings, setSaleListings] = useState([]);
-  const [rentListings, setRentListings] = useState([]);
-  SwiperCore.use([Navigation]);
-  console.log(offerListings);
+  // export default function HeroCarousel() {
+  //   const [index, setIndex] = useState(0);
+
+  //   // Auto-change every 4s
+  //   useEffect(() => {
+  //     const timer = setInterval(() => {
+  //       setIndex((prev) => (prev + 1) % slides.length);
+  //     }, 8000);
+  //     return () => clearInterval(timer);
+  //   }, []);
+
+  //   return (
+  //     <div className="relative w-full h-[100vh] rounded-2xl shadow-lg overflow-hidden ">
+  //       <AnimatePresence mode="wait">
+  //         <motion.div
+  //           key={slides[index].id}
+  //           className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
+  //           style={{ backgroundImage: `url(${slides[index].img})` }}
+  //           initial={{ opacity: 0 }}
+  //           animate={{ opacity: 1 }}
+  //           exit={{ opacity: 0 }}
+  //           transition={{ duration: 2, ease: "easeInOut" }}
+  //         >
+  //           <h2 className="text-3xl md:text-5xl font-bold text-white bg-black/30 px-6 py-3 rounded-xl shadow-md">
+  //             {slides[index].title}
+  //           </h2>
+  //         </motion.div>
+  //       </AnimatePresence>
+
+  //       {/* Arrows */}
+  //       {/* <button
+  //         onClick={() =>
+  //           setIndex((prev) => (prev - 1 + slides.length) % slides.length)
+  //         }
+  //         className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-green-600 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10"
+  //       >
+  //         ‹
+  //       </button>
+  //       <button
+  //         onClick={() => setIndex((prev) => (prev + 1) % slides.length)}
+  //         className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-green-600 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10"
+  //       >
+  //         ›
+  //       </button> */}
+  //     </div>
+  //   );
+  // }
+
+
+  import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Lotion from '../../assets/home/lotion.png'
+import Cover2 from '../../assets/home/cover2.png'
+import glybon from '../../assets/home/image.png'
+
+const slides = [
+  { id: 1, img: Lotion,},
+  { id: 2, img: Cover2, },
+  // { id: 3, img: Cover3,  },
+  { id: 4, img: glybon },
+  { id: 5, img: "/images/haircare.jpg", title: "Hair Care Products" },
+  { id: 6, img: "/images/sunscreen.jpg", title: "Sun Protection" },
+  { id: 7, img: "/images/moisturizers.jpg", title: "Moisturizers" },
+];
+
+export default function HeroCarousel() {
+  const [index, setIndex] = useState(0);
+
+  // Auto-change every 8s
   useEffect(() => {
-    const fetchOfferListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?offer=true&limit=4');
-        const data = await res.json();
-        setOfferListings(data);
-        fetchRentListings();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const fetchRentListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?type=rent&limit=4');
-        const data = await res.json();
-        setRentListings(data);
-        fetchSaleListings();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchSaleListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?type=sale&limit=4');
-        const data = await res.json();
-        setSaleListings(data);
-      } catch (error) {
-        log(error);
-      }
-    };
-    fetchOfferListings();
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 8000);
+    return () => clearInterval(timer);
   }, []);
+
   return (
-    <div>
-      {/* top */}
-      <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
-        <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-          Find your next <span className='text-slate-500'>perfect</span>
-          <br />
-          place with ease
-        </h1>
-        <div className='text-gray-400 text-xs sm:text-sm'>
-          Sahand Estate is the best place to find your next perfect place to
-          live.
-          <br />
-          We have a wide range of properties for you to choose from.
-        </div>
-        <Link
-          to={'/search'}
-          className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
+    <div className="relative w-full h-[100vh] md:h-[100vh] rounded-2xl shadow-lg overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={slides[index].id}
+          className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
+          style={{ backgroundImage: `url(${slides[index].img})` }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
         >
-          Let's get started...
-        </Link>
-      </div>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white bg-black/30 px-6 py-3 rounded-xl shadow-md text-center">
+            {slides[index].title}
+          </h2>
+        </motion.div>
+      </AnimatePresence>
 
-      {/* swiper */}
-      <Swiper navigation>
-        {offerListings &&
-          offerListings.length > 0 &&
-          offerListings.map((listing) => (
-            <SwiperSlide>
-              <div
-                style={{
-                  background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                  backgroundSize: 'cover',
-                }}
-                className='h-[500px]'
-                key={listing._id}
-              ></div>
-            </SwiperSlide>
-          ))}
-      </Swiper>
-
-      {/* listing results for offer, sale and rent */}
-
-      <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
-        {offerListings && offerListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent offers</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
-            </div>
-            <div className='flex flex-wrap gap-4'>
-              {offerListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
-              ))}
-            </div>
-          </div>
-        )}
-        {rentListings && rentListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for rent</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
-            </div>
-            <div className='flex flex-wrap gap-4'>
-              {rentListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
-              ))}
-            </div>
-          </div>
-        )}
-        {saleListings && saleListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for sale</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
-            </div>
-            <div className='flex flex-wrap gap-4'>
-              {saleListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Optional Arrows */}
+      {/* 
+      <button
+        onClick={() =>
+          setIndex((prev) => (prev - 1 + slides.length) % slides.length)
+        }
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-green-600 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10"
+      >
+        ‹
+      </button>
+      <button
+        onClick={() => setIndex((prev) => (prev + 1) % slides.length)}
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-green-600 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10"
+      >
+        ›
+      </button>
+      */}
     </div>
   );
 }

@@ -1,74 +1,77 @@
-import { FaSearch } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 
-export default function Header() {
-  const { currentUser } = useSelector((state) => state.user);
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('searchTerm', searchTerm);
-    const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
-  };
+
+import React, { useEffect, useState } from "react";
+import Logo from "../../assets/logo1.png";
+import Nav from "./Nav";
+import { motion } from "framer-motion";
+
+export default function Navbar() {
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm');
-    if (searchTermFromUrl) {
-      setSearchTerm(searchTermFromUrl);
-    }
-  }, [location.search]);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className='bg-slate-200 shadow-md'>
-      <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-        <Link to='/'>
-          <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-            <span className='text-slate-500'>chauhan</span>
-            <span className='text-slate-700'>Estate</span>
-          </h1>
-        </Link>
-        <form
-          onSubmit={handleSubmit}
-          className='bg-slate-100 p-3 rounded-lg flex items-center'
-        >
-          <input
-            type='text'
-            placeholder='Search...'
-            className='bg-transparent focus:outline-none w-24 sm:w-64'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+    <header className="w-full  fixed top-0 left-0 z-50 ">
+      <div className="max-w-7xl mx-auto flex flex-col items-center py-2">
+        
+        {/* Logo + Company Info */}
+        <div className="flex items-center space-x-3">
+          {/* Logo */}
+          <img
+            src={Logo}
+            alt="Logo"
+            className="w-28 h-30 object-contain"
           />
-          <button>
-            <FaSearch className='text-slate-600' />
-          </button>
-        </form>
-        <ul className='flex gap-4'>
-          <Link to='/'>
-            <li className='hidden sm:inline text-slate-700 hover:underline'>
-              Home
-            </li>
-          </Link>
-          <Link to='/about'>
-            <li className='hidden sm:inline text-slate-700 hover:underline'>
-              About
-            </li>
-          </Link>
-          <Link to='/profile'>
-            {currentUser ? (
-              <img
-                className='rounded-full h-7 w-7 object-cover'
-                src={currentUser.avatar}
-                alt='profile'
-              />
-            ) : (
-              <li className=' text-slate-700 hover:underline'> Sign in</li>
-            )}
-          </Link>
-        </ul>
+        
+
+          {/* Animated Company Name + Tagline */}
+          <motion.div
+            className="text-center"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: 0.15 }
+              }
+            }}
+          >
+            {/* Company Name */}
+            <motion.h1
+              className="text-2xl md:text-3xl font-bold tracking-tight"
+              initial={{ y: -30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="font-serif text-gray-800">LeoGuard</span>{" "}
+              <span className="text-green-600">India</span>{" "}
+              <span className="text-gray-800">Pvt. Ltd.</span>
+            </motion.h1>
+
+            {/* Tagline */}
+            <motion.p
+              className="text-sm text-gray-500 italic"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              Transforming skin through science
+            </motion.p>
+          </motion.div>
+        </div>
+
+        {/* Navigation (fade out on scroll) */}
+        <motion.div
+          animate={{ opacity: scrollY > 50 ? 0 : 1 }}
+          transition={{ duration: 0.5 }}
+          className="transition-opacity ease-in-out duration-500"
+        >
+          <Nav />
+        </motion.div>
       </div>
     </header>
   );
